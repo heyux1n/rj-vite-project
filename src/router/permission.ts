@@ -1,14 +1,14 @@
 import router from '@/router'
 import store from '@/store'
 import {getToken} from '@/util/auth' // 验权
-const whiteList = ['/auth', '/404'] //白名单,不需要登录的路由
+const whiteList = ['/login', '/404'] //白名单,不需要登录的路由
 
 
 router.beforeEach((to, from, next) => {
   if (getToken()) {
     //如果已经登录
 
-    if (to.path === '/auth') {
+    if (to.path === '/login') {
       next({path: '/'})
     } else if (!store.getters.role) {
       next()
@@ -20,7 +20,7 @@ router.beforeEach((to, from, next) => {
     next()
   } else {
     //如果路径不是白名单内的,而且又没有登录,就跳转登录页面
-    next('/auth')
+    next('/login')
   }
 })
 router.afterEach(() => {
