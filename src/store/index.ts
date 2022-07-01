@@ -1,5 +1,4 @@
 import {createStore} from 'vuex'
-import user from '@/store/modules/user'
 import {getUserInfo, login} from "@/api/auth";
 import {setToken} from "@/util/auth";
 
@@ -19,6 +18,9 @@ export default createStore({
   state() {
     return defaultState
   },
+  getters: {
+    userId: state => state.id,
+  },
   mutations: {
     setUserInfo(state, userInfo) {
       state.id = userInfo.id;
@@ -29,18 +31,36 @@ export default createStore({
       state.role = userInfo.role;
       state.dept = userInfo.dept;
     },
+
+    resetUserInfo(state) {
+      state.id = '';
+      state.account = '';
+      state.password = '';
+      state.realname = '';
+      state.nickname = '';
+      state.role = '';
+      state.dept = '';
+    },
   },
   actions: {
     login({commit, state}, loginForm) {
       return new Promise((resolve, reject) => {
         login(loginForm).then(res => {
           setToken(res.data)
-          getUserInfo().then(res => {
-            commit('setUserInfo', res.data);
-            resolve(res)
-          }).catch(err => {
-            reject(err)
-          })
+          resolve(res)
+        }).catch(err => {
+          reject(err)
+        })
+      })
+    },
+
+    setUserInfo({commit}) {
+      return new Promise((resolve, reject) => {
+        getUserInfo().then(res => {
+          commit('setUserInfo', res.data);
+          resolve(res)
+        }).catch(err => {
+          reject(err)
         })
       })
     }

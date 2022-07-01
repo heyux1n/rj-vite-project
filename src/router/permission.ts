@@ -7,10 +7,13 @@ const whiteList = ['/login', '/404'] //白名单,不需要登录的路由
 router.beforeEach((to, from, next) => {
   if (getToken()) {
     //如果已经登录
-
     if (to.path === '/login') {
       next({path: '/'})
-    } else if (!store.getters.role) {
+    } else if (!store.getters.id) {
+      console.log(store.getters.id)
+      store.dispatch('setUserInfo').then(() => {
+        next({...to})
+      })
       next()
     } else {
       next()
@@ -20,6 +23,7 @@ router.beforeEach((to, from, next) => {
     next()
   } else {
     //如果路径不是白名单内的,而且又没有登录,就跳转登录页面
+    store.commit('resetUserInfo')
     next('/login')
   }
 })

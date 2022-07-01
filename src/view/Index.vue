@@ -55,7 +55,6 @@
 </template>
 
 <script setup lang="ts">
-import {ref} from 'vue'
 
 //禅道
 const ZENTAO_URL = "http://192.168.12.13:8888"
@@ -85,7 +84,6 @@ const openUrl = (url: string) => {
 .wrapper {
   width: 100%;
   height: 100%;
-  padding-top: 16%;
   /* 背景图垂直、水平均居中 */
   background-position: center center;
   /* 背景图不平铺 */
@@ -96,6 +94,9 @@ const openUrl = (url: string) => {
   background-size: cover;
   /* 设置背景颜色，背景图加载过程中会显示背景色 */
   background-image: url("../assets/img/bg.jpg");
+  display: flex;
+  justify-content: center;
+  align-content: center;
 }
 
 .demo-icon-list {
@@ -119,7 +120,7 @@ const openUrl = (url: string) => {
   border-right: solid 1px #e6e6e6;
   border-bottom: solid 1px #e6e6e6;
   transition: background-color 0.3s;
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.2);
 }
 
 .icon-item:hover {

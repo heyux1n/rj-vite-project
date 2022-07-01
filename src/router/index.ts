@@ -4,7 +4,7 @@ import {
   RouteRecordRaw
 } from 'vue-router'
 
-import Index from '@/view/index.vue'
+import Index from '@/view/Index.vue'
 import Login from '@/view/login/Login.vue'
 
 const routes: Array<RouteRecordRaw> = [
