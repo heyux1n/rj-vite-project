@@ -9,12 +9,10 @@ router.beforeEach((to, from, next) => {
     //如果已经登录
     if (to.path === '/login') {
       next({path: '/'})
-    } else if (!store.getters.id) {
-      console.log(store.getters.id)
+    } else if (!store.getters.userId) {
       store.dispatch('setUserInfo').then(() => {
         next({...to})
       })
-      next()
     } else {
       next()
     }

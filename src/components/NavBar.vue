@@ -9,7 +9,6 @@
       mode="horizontal"
       :ellipsis="false"
       menu-trigger="click"
-      @select="handleSelect"
   >
     <el-menu-item index="0">统一内网服务</el-menu-item>
     <div class="flex-grow"/>
@@ -19,8 +18,8 @@
             :src="boy"
         />
       </template>
-      <el-menu-item index="1-1" disabled>heyuxin</el-menu-item>
-      <el-menu-item index="3-3">退出登录</el-menu-item>
+      <el-menu-item index="1-1" disabled>{{ `${store.state.realname}（${store.state.account}）` }}</el-menu-item>
+      <el-menu-item index="3-3" @click="logout">退出登录</el-menu-item>
     </el-sub-menu>
   </el-menu>
 </template>
@@ -29,10 +28,15 @@
 import boy from '@/assets/avatar/boy.png'
 import girl from '@/assets/avatar/girl.png'
 import {ref} from 'vue'
+import {useStore} from 'vuex'
 
 const activeIndex = ref('1')
-const handleSelect = (key: string, keyPath: string[]) => {
-  console.log(key, keyPath)
+const store = useStore()
+
+const logout = () => {
+  store.dispatch('logout').then(() => {
+    location.reload()
+  })
 }
 </script>
 

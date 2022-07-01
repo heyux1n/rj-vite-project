@@ -5,18 +5,18 @@
 **/
 <template>
   <div class="login-container">
-    <el-form class="login-form" autoComplete="on" :model="loginForm" :rules="loginRules" ref="loginForm"
+    <el-form class="login-form" autoComplete="on" :model="loginForm" :rules="loginRules" ref="loginFormRef"
              label-position="left">
       <h3 class="title">内网统一登录</h3>
       <el-form-item prop="account">
         <el-input v-model="loginForm.account" autoComplete="on"/>
       </el-form-item>
       <el-form-item prop="password">
-        <el-input type="password" @keyup.enter.native="handleLogin" v-model="loginForm.password"
+        <el-input type="password" @keyup.enter.native="handleLogin(loginFormRef)" v-model="loginForm.password"
                   autoComplete="on"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button style="width:100%;" type="primary" :loading="loading" @click.native.prevent="handleLogin">
+        <el-button style="width:100%;" type="primary" :loading="loading" @click.native.prevent="handleLogin(loginFormRef)">
           登录
         </el-button>
       </el-form-item>
@@ -24,36 +24,40 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import {reactive, ref} from 'vue'
+import {useRouter} from 'vue-router'
+import {useStore} from 'vuex'
+import type {FormInstance, FormRules} from 'element-plus'
 
-export default {
-  name: "Login",
-  data() {
-    return {
-      loginForm: {
-        account: 'admin',
-        password: '123456'
-      },
-      loginRules: {
-        account: [{required: true, trigger: 'blur', message: "请输入用户名"}],
-        password: [{required: true, trigger: 'blur', message: "请输入密码"}]
-      },
-      loading: false
-    }
-  },
-  methods: {
-    handleLogin() {
-      this.$refs.loginForm.validate(valid => {
-        if (valid) {
-          this.$store.dispatch('login', this.loginForm).then(() => {
-            this.loading = true
-            this.$router.push({path: '/'})
-          })
-        }
+const store = useStore()
+const router = useRouter()
+
+const loginFormRef = ref<FormInstance>()
+const loginRules = reactive<FormRules>({
+  account: [{required: true, trigger: 'blur', message: "请输入用户名"}],
+  password: [{required: true, trigger: 'blur', message: "请输入密码"}]
+})
+
+const loginForm = ref({
+  account: '',
+  password: ''
+})
+const loading = ref(false)
+
+const handleLogin = async (formEl: FormInstance | undefined) => {
+  if (!formEl) return
+  await formEl.validate(valid => {
+    if (valid) {
+      store.dispatch('login', loginForm.value).then(() => {
+        loading.value = true
+        router.push({path: '/'})
       })
     }
-  }
+  })
 }
+
+
 </script>
 
 <style lang="scss" scoped>

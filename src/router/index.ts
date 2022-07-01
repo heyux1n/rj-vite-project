@@ -5,13 +5,21 @@ import {
 } from 'vue-router'
 
 import Index from '@/view/Index.vue'
+import Main from '@/view/Main.vue'
 import Login from '@/view/login/Login.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
     name: 'index',
-    component: Index
+    component: Index,
+    children: [
+      {
+        path: '/',
+        name: 'Main',
+        component: Main,
+      }
+    ]
   },
   {
     path: '/login',

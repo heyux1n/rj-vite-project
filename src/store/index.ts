@@ -1,6 +1,6 @@
 import {createStore} from 'vuex'
 import {getUserInfo, login} from "@/api/auth";
-import {setToken} from "@/util/auth";
+import {removeToken, setToken} from "@/util/auth";
 
 const defaultState = {
   id: "",
@@ -52,6 +52,10 @@ export default createStore({
           reject(err)
         })
       })
+    },
+    logout({commit}) {
+      removeToken()
+      commit('resetUserInfo');
     },
 
     setUserInfo({commit}) {
